@@ -20,7 +20,6 @@ const Gameboard = (() => {
     }
     
     //Game flow controller
-    
     const getActivePlayer = () => activePlayer;
 
     const switchPlayer = () => {
@@ -34,8 +33,8 @@ const Gameboard = (() => {
 
     //Make move function
     const makeMove = (index) => {
-        board[index] = Gameboard.getActivePlayer().playerSymbol;
-        Gameboard.update();
+        board[index] = activePlayer.playerSymbol;
+        update();
     };
 
     //Check for a winner function
