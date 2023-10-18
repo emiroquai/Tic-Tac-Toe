@@ -24,9 +24,11 @@ header {
     grid-template-rows: 1fr 1fr 1fr;
     background-color: lightgreen;
     border: 5px solid darkgrey;
+    border-radius: 8px;
 }
 
 .cell {
+    background-color: unset;
     border: 5px solid darkgrey;
     font-size: 5em;
     display: flex;

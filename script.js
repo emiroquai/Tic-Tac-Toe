@@ -2,7 +2,7 @@
 
 const Gameboard = (() => {
     const board = ['', '', '', '', '', '', '', '', '']
-    const cells = document.querySelectorAll('div.cell')
+    const cells = document.querySelectorAll('button.cell')
     
     const x = Player("Player1", "X")
     const o = Player("Player2", "O")
@@ -105,9 +105,10 @@ function Player (name, playerSymbol) {
     return {name , playerSymbol};
 }
 
-// Event listener
+// Screen controller
+
 function clickHandlerBoard() {
-    const cells = document.querySelectorAll('div.cell');
+    const cells = document.querySelectorAll('button.cell');
     cells.forEach((cell, index) => {
         cell.dataset.index = index;
         cell.addEventListener('click', () => {
