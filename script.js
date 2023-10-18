@@ -2,16 +2,38 @@
 
 const Gameboard = (() => {
     const board = ['', '', '', '', '', '', '', '', '']
-    const cells = document.querySelectorAll('button.cell')
     
+    const getBoard = () => board;
+
+    //Make move function
+    const makeMove = (index) => {
+        activePlayer = GameController.getActivePlayer();
+        board[index] = activePlayer.playerSymbol;
+    };
+
+    return {
+        getBoard,
+        makeMove
+    };
+})();
+
+
+
+// Game controller
+const GameController = (() => {
+    const board = Gameboard.getBoard();
+    const cells = document.querySelectorAll('button.cell')
+
+    //Player factory
+    function Player (name, playerSymbol) {
+        return {name , playerSymbol};
+    }
+
     const x = Player("Player1", "X")
     const o = Player("Player2", "O")
 
-    
-    const getBoard = () => board;
-    
-    //Game flow controller
     let activePlayer = x
+
     const getActivePlayer = () => activePlayer;
 
     const switchPlayer = () => {
@@ -20,12 +42,7 @@ const Gameboard = (() => {
         } else {
             activePlayer = o;
         }
-    }
-
-    //Make move function
-    const makeMove = (index) => {
-        board[index] = activePlayer.playerSymbol;
-    };
+        }
 
     //Check for a winner function
     const checkWinner = () => {
@@ -43,9 +60,9 @@ const Gameboard = (() => {
     
         for (const comb of winCombs) {
             if (
-                cells[comb[0]].textContent != '' &&
-                cells[comb[0]].textContent == cells[comb[1]].textContent &&
-                cells[comb[1]].textContent == cells[comb[2]].textContent 
+                board[comb[0]] != '' &&
+                board[comb[0]] == board[comb[1]] &&
+                board[comb[1]] == board[comb[2]] 
             ) {
                 return true               
             }  
@@ -64,35 +81,22 @@ const Gameboard = (() => {
             }
             return true
         }
+
         if (isBoardFull() && !checkWinner()) {
             return true
         } else {
             return false
         }
-
-    }
-    
-    //Update Gameboard
-    const update = () => {
-        switchPlayer();
     }
 
     return {
-        getBoard,
+        Player,
         getActivePlayer,
         switchPlayer,
-        makeMove,
-        update,
         checkWinner,
         checkDraw
-    };
+        };
 })();
-
-
-//Player factory
-function Player (name, playerSymbol) {
-    return {name , playerSymbol};
-}
 
 // Screen controller
 function ScreenController() {
@@ -112,7 +116,7 @@ function ScreenController() {
             cell.addEventListener('click', () => {
                 if (Gameboard.getBoard()[index] === '') {
                     Gameboard.makeMove(index);
-                    Gameboard.switchPlayer();
+                    GameController.switchPlayer();
                     displayBoard();
 
                 }
@@ -121,7 +125,6 @@ function ScreenController() {
     }
 
     clickHandlerBoard();
-    displayBoard() //Initial display
 }
 
 ScreenController();
