@@ -10,9 +10,16 @@ const Gameboard = (() => {
         board[index] = activePlayer.playerSymbol;
     };
 
+    const resetBoard = () => {
+        for (let index = 0; index < board.length; index++) {
+            board[index] = '';
+        }
+    }
+
     return {
         getBoard,
-        makeMove
+        makeMove,
+        resetBoard,
     };
 })();
 
@@ -106,9 +113,15 @@ const GameController = (() => {
         } else {
             switchPlayer();
             message = activePlayer.name + "'s turn"
-            displayMessage(message)
+            displayMessage(message);
         }
         return
+    }
+
+    const resetGame = () => {
+        Gameboard.resetBoard();
+        activePlayer = x;
+        displayMessage(activePlayer.name + "'s turn");
     }
 
     return {
@@ -118,19 +131,22 @@ const GameController = (() => {
         checkWinner,
         checkDraw,
         displayMessage,
-        endTurn
+        endTurn,
+        resetGame
         };
 })();
 
 // Screen controller module
 function ScreenController() {
-    const cells = document.querySelectorAll('button.cell');
-    board = Gameboard.getBoard();
+    const cells = document.querySelectorAll('button.cell')
+    const start = document.getElementById('start')
 
     //Update display function
     const displayBoard = () => {
         cells.forEach((cell, index) => {
+            const board = Gameboard.getBoard()
             cell.dataset.index = index;
+            
             cell.textContent = board[index];
         })
     }
@@ -145,6 +161,12 @@ function ScreenController() {
                     GameController.endTurn();
                 }
             });
+        });
+
+        start.addEventListener('click', () => {
+            GameController.resetGame();
+            displayBoard();
+
         });
     }
 
