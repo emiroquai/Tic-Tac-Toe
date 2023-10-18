@@ -28,8 +28,8 @@ const GameController = (() => {
         return {name , playerSymbol};
     }
 
-    const x = Player("Player1", "X")
-    const o = Player("Player2", "O")
+    const x = Player("Player 1", "X")
+    const o = Player("Player 2", "O")
 
     let activePlayer = x
 
@@ -95,13 +95,18 @@ const GameController = (() => {
     }
 
     // Function to run when the game ends
-    const endGame = () => {
+    const endTurn = () => {
+        let message = null
         if (checkWinner()) {
-            const message = activePlayer.name + " wins!"
+            message = activePlayer.name + " wins!"
             displayMessage(message);
         } else if(checkDraw()) {
-            const message = "It's a draw"
+            message = "It's a draw"
             displayMessage(message);
+        } else {
+            switchPlayer();
+            message = activePlayer.name + "'s turn"
+            displayMessage(message)
         }
         return
     }
@@ -113,7 +118,7 @@ const GameController = (() => {
         checkWinner,
         checkDraw,
         displayMessage,
-        endGame
+        endTurn
         };
 })();
 
@@ -137,8 +142,7 @@ function ScreenController() {
                 if (Gameboard.getBoard()[index] === '') {
                     Gameboard.makeMove(index);
                     displayBoard();
-                    GameController.endGame();
-                    GameController.switchPlayer();
+                    GameController.endTurn();
                 }
             });
         });
