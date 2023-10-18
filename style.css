@@ -19,8 +19,8 @@ main {
 
 .boardWrapper {
     display: grid;
-    height: 400px;
-    width: 400px;
+    width: clamp(150px, 50vw, 300px);
+    aspect-ratio: 1;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     background-color: lightgreen;
@@ -31,7 +31,7 @@ main {
 .cell {
     background-color: unset;
     border: 5px solid darkgrey;
-    font-size: 5em;
+    font-size: 3em;
     display: flex;
     justify-content: center;
     align-items: center;
