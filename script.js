@@ -1,5 +1,4 @@
 //Gameboard module
-
 const Gameboard = (() => {
     const board = ['', '', '', '', '', '', '', '', '']
     
@@ -19,7 +18,7 @@ const Gameboard = (() => {
 
 
 
-// Game controller
+// Game controller module
 const GameController = (() => {
     const board = Gameboard.getBoard();
     const cells = document.querySelectorAll('button.cell')
@@ -89,21 +88,42 @@ const GameController = (() => {
         }
     }
 
+    // Display message function
+    const displayMessage = (string) => {
+        const messageDiv = document.getElementById('msg')
+        messageDiv.textContent = string;
+    }
+
+    // Function to run when the game ends
+    const endGame = () => {
+        if (checkWinner()) {
+            const message = activePlayer.name + " wins!"
+            displayMessage(message);
+        } else if(checkDraw()) {
+            const message = "It's a draw"
+            displayMessage(message);
+        }
+        return
+    }
+
     return {
         Player,
         getActivePlayer,
         switchPlayer,
         checkWinner,
-        checkDraw
+        checkDraw,
+        displayMessage,
+        endGame
         };
 })();
 
-// Screen controller
+// Screen controller module
 function ScreenController() {
     const cells = document.querySelectorAll('button.cell');
     board = Gameboard.getBoard();
-      //Update display function
-      const displayBoard = () => {
+
+    //Update display function
+    const displayBoard = () => {
         cells.forEach((cell, index) => {
             cell.dataset.index = index;
             cell.textContent = board[index];
@@ -116,9 +136,9 @@ function ScreenController() {
             cell.addEventListener('click', () => {
                 if (Gameboard.getBoard()[index] === '') {
                     Gameboard.makeMove(index);
-                    GameController.switchPlayer();
                     displayBoard();
-
+                    GameController.endGame();
+                    GameController.switchPlayer();
                 }
             });
         });
