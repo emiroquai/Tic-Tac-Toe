@@ -7,19 +7,11 @@ const Gameboard = (() => {
     const x = Player("Player1", "X")
     const o = Player("Player2", "O")
 
-    let activePlayer = null
     
     const getBoard = () => board;
     
-    //Update display function
-    const displayBoard = () => {
-        cells.forEach((cell, index) => {
-            cell.dataset.index = index;
-            cell.textContent = board[index];
-        })
-    }
-    
     //Game flow controller
+    let activePlayer = x
     const getActivePlayer = () => activePlayer;
 
     const switchPlayer = () => {
@@ -82,7 +74,6 @@ const Gameboard = (() => {
     
     //Update Gameboard
     const update = () => {
-        displayBoard();
         switchPlayer();
     }
 
@@ -91,14 +82,12 @@ const Gameboard = (() => {
         getActivePlayer,
         switchPlayer,
         makeMove,
-        displayBoard,
         update,
         checkWinner,
         checkDraw
     };
 })();
 
-Gameboard.update();
 
 //Player factory
 function Player (name, playerSymbol) {
@@ -106,18 +95,33 @@ function Player (name, playerSymbol) {
 }
 
 // Screen controller
-
-function clickHandlerBoard() {
+function ScreenController() {
     const cells = document.querySelectorAll('button.cell');
-    cells.forEach((cell, index) => {
-        cell.dataset.index = index;
-        cell.addEventListener('click', () => {
-            if (Gameboard.getBoard()[index] === '') {
-                Gameboard.makeMove(index);
-                Gameboard.update();
-            }
+    board = Gameboard.getBoard();
+      //Update display function
+      const displayBoard = () => {
+        cells.forEach((cell, index) => {
+            cell.dataset.index = index;
+            cell.textContent = board[index];
+        })
+    }
+
+    function clickHandlerBoard() {
+        cells.forEach((cell, index) => {
+            cell.dataset.index = index;
+            cell.addEventListener('click', () => {
+                if (Gameboard.getBoard()[index] === '') {
+                    Gameboard.makeMove(index);
+                    Gameboard.switchPlayer();
+                    displayBoard();
+
+                }
+            });
         });
-    });
+    }
+
+    clickHandlerBoard();
+    displayBoard() //Initial display
 }
 
-clickHandlerBoard();
+ScreenController();
